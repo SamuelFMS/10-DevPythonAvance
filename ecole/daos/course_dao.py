@@ -3,7 +3,7 @@
 """
 Classe Dao[Course]
 """
-
+from daos.teacher_dao import TeacherDao
 from models.course import Course
 from daos.dao import Dao
 from dataclasses import dataclass
@@ -33,6 +33,9 @@ class CourseDao(Dao[Course]):
         if record is not None:
             course = Course(record['name'], record['start_date'], record['end_date'])
             course.id = record['id_course']
+            if record['id_teacher'] is not None:
+                teacher_dao: TeacherDao = TeacherDao()
+                course.teacher = teacher_dao.read(record['id_teacher'])
         else:
             course = None
 

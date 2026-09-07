@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from daos import address_dao
 from daos.address_dao import AddressDao
 from daos.dao import Dao
 from models.student import Student
@@ -33,13 +32,13 @@ class StudentDao(Dao[Student]):
             cursor.execute(sql, (id_student))
             record = cursor.fetchone()
         if record is not None:
-            address_dao: AddressDao = AddressDao()
             student = Student(
                 first_name=record['first_name'],
                 last_name=record['last_name'],
                 age=record['age'],
             )
             if record['id_address']:
+                address_dao: AddressDao = AddressDao()
                 student.address = address_dao.read(record['id_address'])
         else:
             student = None
