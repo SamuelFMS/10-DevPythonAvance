@@ -92,5 +92,8 @@ class StudentDao(Dao[Student]):
                 "WHERE id_person=%s"
             )
             cursor.execute(sql_person, (id_person_before_delete))
-            Dao.connection.commit()
-            return True
+            if cursor.rowcount == 1:
+                Dao.connection.commit()
+                return True
+            else:
+                return False

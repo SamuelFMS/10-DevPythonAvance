@@ -75,8 +75,11 @@ class CourseDao(Dao[Course]):
                 "WHERE id_course=%s"
             )
             cursor.execute(sql, (course.id))
-            Dao.connection.commit()
-            return True
+            if cursor.rowcount == 1:
+                Dao.connection.commit()
+                return True
+            else:
+                return False
 
     def get_students(self, id_course: int) -> Optional[list[Student]]:
         list_student: Optional[list[Student]]
