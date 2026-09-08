@@ -16,6 +16,7 @@ class AddressDao(Dao[Address]):
             id_address = cursor.lastrowid
             Dao.connection.commit()
         if id_address is not None:
+            address.id = id_address
             return id_address
         else:
             return 0
@@ -38,6 +39,7 @@ class AddressDao(Dao[Address]):
                 street=record['street'],
                 city=record['city'],
                 postal_code=record['postal_code'])
+            address.id = record['id_address']
         else:
             address = None
 
@@ -48,4 +50,13 @@ class AddressDao(Dao[Address]):
         return True
 
     def delete(self, address: Address) -> bool:
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "DELETE FROM address WHERE id_address=%s"
+            )
+            cursor.execute(sql, (address.id))
+            if cursor.rowcount == 1:
+                Dao.connection.commit()
+                return True
+            else:
+                return False
