@@ -36,6 +36,7 @@ class StudentDao(Dao[Student]):
                 first_name=record['first_name'],
                 last_name=record['last_name'],
                 age=record['age'],
+                student_nbr=record['student_nbr'],
             )
             if record['id_address']:
                 address_dao: AddressDao = AddressDao()
