@@ -19,6 +19,7 @@ def tests():
 
     #Recuperation du cours dans la base de donnée
     read_teacher = teacher_dao.read(new_teacher_id)
+    assert read_teacher is not None
     assert read_teacher.id == new_teacher_id
     assert read_teacher.first_name == 'FirstNameTest'
     assert read_teacher.last_name == 'LastNameTest'
@@ -26,7 +27,6 @@ def tests():
     assert read_teacher.hiring_date == date(2021,5,1)
 
     #Suppression du cours que nous venons de créer
-    assert read_teacher != None
     assert teacher_dao.delete(read_teacher)
 
 

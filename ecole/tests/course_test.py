@@ -21,7 +21,8 @@ def tests():
     assert course.id == new_course_id
 
     #Recuperation du cours dans la base de donnée
-    read_course:Course = course_dao.read(new_course_id)
+    read_course:Course|None = course_dao.read(new_course_id)
+    assert read_course is not None
     assert read_course.id == new_course_id
     assert read_course.name == 'test'
     assert read_course.start_date == date(2021,1,2)

@@ -19,13 +19,13 @@ def tests():
 
     #Recuperation du cours dans la base de donnée
     read_student = student_dao.read(new_student_id)
+    assert read_student is not None
     assert read_student.student_nbr == new_student_id
     assert read_student.first_name == 'FirstNameTest'
     assert read_student.last_name == 'LastNameTest'
     assert read_student.age == 20
 
     #Suppression du cours que nous venons de créer
-    assert read_student != None
     assert student_dao.delete(read_student)
 
 
