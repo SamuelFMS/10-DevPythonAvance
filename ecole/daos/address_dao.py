@@ -8,7 +8,17 @@ from models.address import Address
 @dataclass
 class AddressDao(Dao[Address]):
     def create(self, address: Address) -> int:
-        return 0
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "INSERT INTO address(street, city, postal_code) VALUES(%s, %s, %s)"
+            )
+            cursor.execute(sql, (address.street, address.city, address.postal_code))
+            id_address = cursor.lastrowid
+            Dao.connection.commit()
+        if id_address is not None:
+            return id_address
+        else:
+            return 0
 
     def read(self, id_address: int) -> Optional[Address]:
         """Renvoit l'addresse' correspondant à l'entité dont l'id est id_address
