@@ -5,7 +5,7 @@ from models.course import Course
 
 
 class CourseBusiness:
-    courseDao: ClassVar[CourseDao] = CourseDao()
+    course_dao: ClassVar[CourseDao] = CourseDao()
 
     @staticmethod
     def get_all_courses(self) -> list:
@@ -14,20 +14,20 @@ class CourseBusiness:
 
     @staticmethod
     def add_courses(course: Course):
-        return CourseBusiness.courseDao.create(course)
+        return CourseBusiness.course_dao.create(course)
 
     @staticmethod
     def get_course_by_id(id_course: int):
-        return CourseBusiness.courseDao.read(id_course)
+        return CourseBusiness.course_dao.read(id_course)
 
     @staticmethod
     def get_students_from_course(id_course: int):
-        return CourseBusiness.courseDao.get_students(id_course)
+        return CourseBusiness.course_dao.get_students(id_course)
 
     @staticmethod
     def update_course(course: Course):
-        return CourseBusiness.courseDao.update(course)
+        return CourseBusiness.course_dao.update(course)
 
     @staticmethod
     def delete_course(course: Course):
-        return CourseBusiness.courseDao.delete(course)
+        return CourseBusiness.course_dao.delete(course)
