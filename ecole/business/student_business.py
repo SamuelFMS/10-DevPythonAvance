@@ -1,0 +1,25 @@
+from typing import ClassVar
+
+from daos.student_dao import StudentDao
+from models.student import Student
+
+
+class StudentBusiness:
+    student_dao: ClassVar[StudentDao] = StudentDao()
+
+    @staticmethod
+    def get_all_students(self) -> list:
+        students: list = []
+        return students
+
+    @staticmethod
+    def get_student_by_id(id_student: int):
+        return StudentBusiness.student_dao.read(id_student)
+
+    @staticmethod
+    def add_student(student: Student):
+        return  StudentBusiness.student_dao.create(student)
+
+    @staticmethod
+    def delete_student(student: Student):
+        return StudentBusiness.student_dao.delete(student)
