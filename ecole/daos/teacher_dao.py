@@ -9,6 +9,21 @@ from models.teacher import Teacher
 @dataclass
 class TeacherDao(Dao[Teacher]):
     def create(self, teacher: Teacher) -> int:
+        address_id = None
+        with Dao.connection.cursor() as cursor:
+            sql_person = (
+                "INSERT INTO person (first_name, last_name, age, id_address) VALUES (%s,%s,%s,%s)"
+            )
+            cursor.execute(sql_person, (teacher.first_name, teacher.last_name, teacher.age, address_id))
+            id_person = cursor.lastrowid
+            sql_teacher = (
+                "INSERT INTO teacher (hiring_date, id_person) VALUES (%s, %s)"
+            )
+            cursor.execute(sql_teacher, (teacher.hiring_date, id_person))
+            id_teacher = cursor.lastrowid
+            if id_teacher is not None:
+                Dao.connection.commit()
+                return id_teacher
         return 0
 
     def read(self, id_teacher: int) -> Optional[Teacher]:
