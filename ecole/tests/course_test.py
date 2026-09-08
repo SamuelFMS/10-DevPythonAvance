@@ -28,6 +28,20 @@ def tests():
     assert read_course.start_date == date(2021,1,2)
     assert read_course.end_date == date(2026,5,1)
 
+    #Edition du cours
+    read_course.teacher = school.get_course_by_id(2).teacher
+    assert read_course.teacher.id != course.teacher.id
+    read_course.start_date = date(2021,3,5)
+    read_course.end_date = date(2025,5,30)
+    read_course.name = "Lecture"
+    assert course_dao.update(read_course)
+    assert read_course.id is not None
+    edited_course = course_dao.read(read_course.id)
+    assert edited_course.teacher == school.get_course_by_id(2).teacher
+    assert edited_course.start_date == date(2021,3,5)
+    assert edited_course.end_date == date(2025,5,30)
+    assert edited_course.name == "Lecture"
+
     #Suppression du cours que nous venons de créer
     assert course_dao.delete(read_course)
 
