@@ -8,6 +8,7 @@ from models.teacher import Teacher
 
 
 def tests():
+    print("Executing tests for Course")
     school: School = School()
     course_dao = CourseDao()
 

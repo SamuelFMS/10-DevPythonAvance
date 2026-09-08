@@ -77,7 +77,6 @@ class CourseDao(Dao[Course]):
             cursor.execute(sql, (course.id))
             Dao.connection.commit()
             return True
-        return False
 
     def get_students(self, id_course: int) -> Optional[list[Student]]:
         list_student: Optional[list[Student]]
