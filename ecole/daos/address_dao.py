@@ -9,9 +9,7 @@ from models.address import Address
 class AddressDao(Dao[Address]):
     def create(self, address: Address) -> int:
         with Dao.connection.cursor() as cursor:
-            sql = (
-                "INSERT INTO address(street, city, postal_code) VALUES(%s, %s, %s)"
-            )
+            sql = ("INSERT INTO address(street, city, postal_code) VALUES(%s, %s, %s)")
             cursor.execute(sql, (address.street, address.city, address.postal_code))
             id_address = cursor.lastrowid
             Dao.connection.commit()
@@ -27,33 +25,38 @@ class AddressDao(Dao[Address]):
         address: Optional[Address]
 
         with Dao.connection.cursor() as cursor:
-            sql = (
-                "SELECT * "
-                "FROM address "
-                "WHERE id_address = %s"
-            )
+            sql = ("SELECT * "
+                   "FROM address "
+                   "WHERE id_address = %s")
             cursor.execute(sql, (id_address))
             record = cursor.fetchone()
         if record is not None:
-            address = Address(
-                street=record['street'],
-                city=record['city'],
-                postal_code=record['postal_code'])
+            address = Address(street=record['street'], city=record['city'], postal_code=record['postal_code'])
             address.id = record['id_address']
         else:
             address = None
 
         return address
 
-
     def update(self, address: Address) -> bool:
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql = ("UPDATE address "
+                   "SET street=%(street)s, "
+                   "city=%(city)s, "
+                   "postal_code=%(postal_code)s "
+                   "WHERE id_address=%(id_address)s")
+
+            cursor.execute(sql, {"street": address.street, "city": address.city, "postal_code": address.postal_code,
+                "id_address": address.id})
+            if (cursor.rowcount == 1):
+                Dao.connection.commit()
+                return True
+            else:
+                return False
 
     def delete(self, address: Address) -> bool:
         with Dao.connection.cursor() as cursor:
-            sql = (
-                "DELETE FROM address WHERE id_address=%s"
-            )
+            sql = ("DELETE FROM address WHERE id_address=%s")
             cursor.execute(sql, (address.id))
             if cursor.rowcount == 1:
                 Dao.connection.commit()
