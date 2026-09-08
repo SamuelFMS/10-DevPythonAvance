@@ -29,6 +29,7 @@ class CourseDao(Dao[Course]):
             id_course = cursor.lastrowid
             Dao.connection.commit()
         if id_course is not None:
+            course.id = id_course
             return id_course
         else:
             return 0
@@ -68,8 +69,15 @@ class CourseDao(Dao[Course]):
         :param course: cours dont l'entité Course correspondante est à supprimer
         :return: True si la suppression a pu être réalisée
         """
-        ...
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "DELETE FROM course "
+                "WHERE id_course=%s"
+            )
+            cursor.execute(sql, (course.id))
+            Dao.connection.commit()
+            return True
+        return False
 
     def get_students(self, id_course: int) -> Optional[list[Student]]:
         list_student: Optional[list[Student]]
