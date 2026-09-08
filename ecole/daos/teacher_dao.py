@@ -22,6 +22,7 @@ class TeacherDao(Dao[Teacher]):
             cursor.execute(sql_teacher, (teacher.hiring_date, id_person))
             id_teacher = cursor.lastrowid
             if id_teacher is not None:
+                teacher.id = id_teacher
                 Dao.connection.commit()
                 return id_teacher
         return 0
@@ -60,4 +61,20 @@ class TeacherDao(Dao[Teacher]):
         return True
 
     def delete(self, teacher: Teacher) -> bool:
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql_get_id_person_before_delete = ("SELECT id_person FROM teacher WHERE id_teacher=%s")
+            cursor.execute(sql_get_id_person_before_delete, (teacher.id,))
+            record = cursor.fetchone()
+            id_person_before_delete = record['id_person']
+            sql_teacher = (
+                "DELETE FROM teacher "
+                "WHERE id_teacher=%s"
+            )
+            cursor.execute(sql_teacher, (teacher.id,))
+            sql_person = (
+                "DELETE FROM person "
+                "WHERE id_person=%s"
+            )
+            cursor.execute(sql_person, (id_person_before_delete))
+            Dao.connection.commit()
+            return True
