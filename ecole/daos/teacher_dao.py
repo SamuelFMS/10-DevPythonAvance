@@ -47,6 +47,7 @@ class TeacherDao(Dao[Teacher]):
                 age=record['age'],
                 hiring_date=record['hiring_date']
             )
+            teacher.id = id_teacher
             if record['id_address']:
                 address_dao: AddressDao = AddressDao()
                 teacher.address = address_dao.read(record['id_address'])
