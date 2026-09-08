@@ -51,6 +51,11 @@ class School:
             print()
 
     @staticmethod
+    def get_students_from_course(id_course: int):
+        course_dao: CourseDao = CourseDao()
+        return course_dao.get_students(id_course)
+
+    @staticmethod
     def get_course_by_id(id_course: int):
         course_dao: CourseDao = CourseDao()
         return course_dao.read(id_course)

@@ -3,11 +3,14 @@
 """
 Classe Dao[Course]
 """
+from daos.student_dao import StudentDao
 from daos.teacher_dao import TeacherDao
 from models.course import Course
 from daos.dao import Dao
 from dataclasses import dataclass
 from typing import Optional
+
+from models.student import Student
 
 
 @dataclass
@@ -58,3 +61,20 @@ class CourseDao(Dao[Course]):
         """
         ...
         return True
+
+    def get_students(self, id_course: int) -> Optional[list[Student]]:
+        list_student: Optional[list[Student]]
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "SELECT * FROM takes "
+                "WHERE id_course=%s"
+            )
+            cursor.execute(sql, (id_course,))
+            record = cursor.fetchall()
+        if record is not None:
+            student_dao = StudentDao()
+            list_student = []
+            for student in record:
+                list_student.append(student_dao.read(student["student_nbr"]));
+
+        return list_student

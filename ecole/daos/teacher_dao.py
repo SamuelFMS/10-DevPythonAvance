@@ -40,7 +40,6 @@ class TeacherDao(Dao[Teacher]):
 
         return teacher
 
-
     def update(self, teacher: Teacher) -> bool:
         return True
 
