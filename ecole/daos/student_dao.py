@@ -27,6 +27,7 @@ class StudentDao(Dao[Student]):
             cursor.execute(sql_student, (id_person,))
             id_student = cursor.lastrowid
             if id_student is not None:
+                student.student_nbr = id_student
                 Dao.connection.commit()
                 return id_student
         return 0
@@ -50,8 +51,8 @@ class StudentDao(Dao[Student]):
                 first_name=record['first_name'],
                 last_name=record['last_name'],
                 age=record['age'],
-                student_nbr=record['student_nbr'],
             )
+            student.student_nbr = record['student_nbr']
             if record['id_address']:
                 address_dao: AddressDao = AddressDao()
                 student.address = address_dao.read(record['id_address'])
@@ -76,5 +77,20 @@ class StudentDao(Dao[Student]):
         :param student: Etudiant dont l'entité Student correspondante est à supprimer
         :return: True si la suppression a pu être réalisée
         """
-        ...
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql_get_id_person_before_delete = ("SELECT id_person FROM student WHERE student_nbr=%s")
+            cursor.execute(sql_get_id_person_before_delete, (student.student_nbr,))
+            record = cursor.fetchone()
+            id_person_before_delete = record['id_person']
+            sql_student = (
+                "DELETE FROM student "
+                "WHERE student_nbr=%s"
+            )
+            cursor.execute(sql_student, (student.student_nbr,))
+            sql_person = (
+                "DELETE FROM person "
+                "WHERE id_person=%s"
+            )
+            cursor.execute(sql_person, (id_person_before_delete))
+            Dao.connection.commit()
+            return True

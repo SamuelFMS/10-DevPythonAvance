@@ -18,7 +18,7 @@ class Student(Person):
     - courses_taken : liste des cours pris par cet élève
     """
     students_nb: ClassVar[int] = 0  # nb d'étudiants créés
-    student_nbr: int
+    student_nbr: int|None = field(init=False)
     courses_taken: list[Course] = field(default_factory=list, init=False)
 
     def add_course(self, course: Course) -> None:
