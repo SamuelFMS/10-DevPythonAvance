@@ -14,7 +14,21 @@ class StudentDao(Dao[Student]):
         :param Student: à créer sous forme d'entité Student en BD
         :return: l'id de l'entité insérée en BD (0 si la création a échoué)
         """
-        ...
+        address_id = None
+        with Dao.connection.cursor() as cursor:
+            sql_person = (
+                "INSERT INTO person (first_name, last_name, age, id_address) VALUES (%s,%s,%s,%s)"
+            )
+            cursor.execute(sql_person, (student.first_name, student.last_name, student.age, address_id))
+            id_person = cursor.lastrowid
+            sql_student = (
+                "INSERT INTO student (id_person) VALUES (%s)"
+            )
+            cursor.execute(sql_student, (id_person,))
+            id_student = cursor.lastrowid
+            if id_student is not None:
+                Dao.connection.commit()
+                return id_student
         return 0
 
     def read(self, id_student: int) -> Optional[Student]:
