@@ -1,11 +1,9 @@
-from business.school import School
 from daos.address_dao import AddressDao
 from models.address import Address
 
 
 def tests():
     print("Executing tests for Address")
-    school: School = School()
     address_dao = AddressDao()
 
     # Creation d'un cours

@@ -1,7 +1,3 @@
-from datetime import date
-
-from business import school
-from business.school import School
 from business.student_business import StudentBusiness
 from models.student import Student
 

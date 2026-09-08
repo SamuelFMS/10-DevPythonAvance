@@ -1,6 +1,4 @@
 from datetime import date
-
-from business import school
 from business.course_business import CourseBusiness
 from models.course import Course
 from models.teacher import Teacher
