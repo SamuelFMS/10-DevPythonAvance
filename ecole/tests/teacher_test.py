@@ -21,6 +21,18 @@ def tests():
     assert read_teacher.age == 20
     assert read_teacher.hiring_date == date(2021,5,1)
 
+    #Edition du teacher
+    read_teacher.first_name = 'NewFirstName'
+    read_teacher.last_name = 'NewLastName'
+    read_teacher.age = 21
+    read_teacher.hiring_date = date(2024,6,7)
+    assert TeacherBusiness.update_teacher(read_teacher)
+    edited_student = TeacherBusiness.get_teacher_by_id(read_teacher.id)
+    assert edited_student.first_name == 'NewFirstName'
+    assert edited_student.last_name == 'NewLastName'
+    assert edited_student.age == 21
+    assert edited_student.hiring_date == date(2024,6,7)
+
     #Suppression du cours que nous venons de créer
     assert TeacherBusiness.delete_teacher(read_teacher)
 

@@ -24,3 +24,7 @@ class TeacherBusiness:
     @staticmethod
     def delete_teacher(teacher: Teacher):
         return TeacherBusiness.teacher_dao.delete(teacher)
+
+    @staticmethod
+    def update_teacher(teacher: Teacher):
+        return TeacherBusiness.teacher_dao.update(teacher)
