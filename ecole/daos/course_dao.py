@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from typing import Optional
 
 from daos.dao import Dao
-from daos.teacher_dao import TeacherDao
 from models.course import Course
 
 
@@ -98,6 +97,9 @@ class CourseDao(Dao[Course]):
         return list_course
 
     def parse(self, record) -> Optional[Course]:
+        #Import local pour eviter recursiviter
+        from daos.teacher_dao import TeacherDao
+
         course: Optional[Course]
         if record is not None:
             course = Course(record['name'], record['start_date'], record['end_date'])

@@ -7,7 +7,6 @@ Classe Student, fille de la classe Person
 from dataclasses import dataclass, field
 from typing import ClassVar
 
-from business import course_business
 from business.course_business import CourseBusiness
 from .person import Person
 from .course import Course
