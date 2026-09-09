@@ -124,6 +124,16 @@ class CourseDao(Dao[Course]):
 
         return list_student"""
 
+    def assign_student_to_course(self, id_student: int, course: Course) -> bool:
+        with Dao.connection.cursor() as cursor:
+            sql = """INSERT INTO takes(student_nbr, id_course) VALUES (%s, %s)"""
+            cursor.execute(sql, (id_student, course.id))
+            if cursor.rowcount == 1:
+                Dao.connection.commit()
+                return True
+            else:
+                return False
+
     def get_courses_by_student(self, id_student) -> Optional[list[Course]]:
         list_course: Optional[list[Course]] = None
         with Dao.connection.cursor() as cursor:

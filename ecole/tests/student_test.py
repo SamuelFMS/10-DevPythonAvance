@@ -1,3 +1,4 @@
+from business.course_business import CourseBusiness
 from business.student_business import StudentBusiness
 from daos.address_dao import AddressDao
 from models.student import Student
@@ -6,7 +7,7 @@ from models.student import Student
 def tests():
     print("Executing tests for student")
 
-    # Creation d'un cours
+    # Creation d'un eleve
     student = Student("FirstNameTest", "LastNameTest", 20)
     address_dao = AddressDao()
     address = address_dao.get_all()[0]
@@ -16,7 +17,7 @@ def tests():
     assert new_student_id != 0
     assert student.student_nbr == new_student_id
 
-    #Recuperation du cours dans la base de donnée
+    #Recuperation de l'eleve dans la base de donnée
     read_student = StudentBusiness.get_student_by_id(new_student_id)
     assert read_student is not None
     assert read_student.student_nbr == new_student_id
@@ -24,6 +25,7 @@ def tests():
     assert read_student.last_name == 'LastNameTest'
     assert read_student.age == 20
     assert read_student.address == address
+    read_student.assign_course(CourseBusiness.get_all_course()[0])
 
     #Edition du student
     read_student.first_name = 'NewFirstName'
@@ -35,7 +37,7 @@ def tests():
     assert edited_student.last_name == 'NewLastName'
     assert edited_student.age == 21
 
-    #Suppression du cours que nous venons de créer
+    #Suppression du eleve que nous venons de créer
     assert StudentBusiness.delete_student(read_student)
 
     #Verifie que get_all n'est pas vide

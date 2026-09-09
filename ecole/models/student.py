@@ -24,8 +24,14 @@ class Student(Person):
     student_nbr: int|None = field(init=False)
 
     def courses_taken(self):
-        if(self.student_nbr != None):
+        if self.student_nbr is not None:
             return CourseBusiness.get_course_from_student(self.student_nbr)
+        return None
+
+    def assign_course(self, course: Course):
+        if self.student_nbr is not None:
+            return CourseBusiness.assign_student_to_course(self.student_nbr, course)
+        return None
 
     def __str__(self) -> str:
         person_str = super().__str__()

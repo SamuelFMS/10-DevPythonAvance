@@ -80,6 +80,11 @@ class StudentDao(Dao[Student]):
         :return: True si la suppression a pu être réalisée
         """
         with Dao.connection.cursor() as cursor:
+            # delete all the assigned course
+            sql = """DELETE FROM takes 
+                   WHERE student_nbr=%s"""
+            cursor.execute(sql, (student.student_nbr,))
+
             sql_get_id_person_before_delete = ("SELECT id_person FROM student WHERE student_nbr=%s")
             cursor.execute(sql_get_id_person_before_delete, (student.student_nbr,))
             record = cursor.fetchone()
