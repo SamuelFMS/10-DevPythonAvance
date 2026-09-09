@@ -1,4 +1,5 @@
 from business.student_business import StudentBusiness
+from daos.address_dao import AddressDao
 from models.student import Student
 
 
@@ -7,6 +8,10 @@ def tests():
 
     # Creation d'un cours
     student = Student("FirstNameTest", "LastNameTest", 20)
+    address_dao = AddressDao()
+    address = address_dao.get_all()[0]
+    student.address = address
+    assert student.address is not None
     new_student_id = StudentBusiness.add_student(student)
     assert new_student_id != 0
     assert student.student_nbr == new_student_id
@@ -18,6 +23,7 @@ def tests():
     assert read_student.first_name == 'FirstNameTest'
     assert read_student.last_name == 'LastNameTest'
     assert read_student.age == 20
+    assert read_student.address == address
 
     #Edition du student
     read_student.first_name = 'NewFirstName'

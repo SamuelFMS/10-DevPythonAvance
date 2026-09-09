@@ -14,7 +14,11 @@ class StudentDao(Dao[Student]):
         :param Student: à créer sous forme d'entité Student en BD
         :return: l'id de l'entité insérée en BD (0 si la création a échoué)
         """
-        address_id = None
+        if(student.address is not None):
+            address_dao = AddressDao()
+            address_id = address_dao.create(student.address)
+        else:
+            address_id = None
         with Dao.connection.cursor() as cursor:
             sql_person = ("INSERT INTO person (first_name, last_name, age, id_address) VALUES (%s,%s,%s,%s)")
             cursor.execute(sql_person, (student.first_name, student.last_name, student.age, address_id))
@@ -88,6 +92,9 @@ class StudentDao(Dao[Student]):
             cursor.execute(sql_person, (id_person_before_delete))
             if cursor.rowcount == 1:
                 Dao.connection.commit()
+                if student.address is not None:
+                    address_dao = AddressDao()
+                    address_dao.delete(student.address)
                 return True
             else:
                 return False
