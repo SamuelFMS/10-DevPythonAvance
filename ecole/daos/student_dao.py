@@ -116,3 +116,6 @@ class StudentDao(Dao[Student]):
                 return True
             else:
                 return False
+
+    def get_all(self) -> Optional[list[Student]]:
+        return []

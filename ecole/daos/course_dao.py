@@ -41,14 +41,7 @@ class CourseDao(Dao[Course]):
             sql = "SELECT * FROM course WHERE id_course=%s"
             cursor.execute(sql, (id_course,))
             record = cursor.fetchone()
-        if record is not None:
-            course = Course(record['name'], record['start_date'], record['end_date'])
-            course.id = record['id_course']
-            if record['id_teacher'] is not None:
-                teacher_dao: TeacherDao = TeacherDao()
-                course.teacher = teacher_dao.read(record['id_teacher'])
-        else:
-            course = None
+            course = self.parse(record)
 
         return course
 
@@ -90,6 +83,33 @@ class CourseDao(Dao[Course]):
                 return True
             else:
                 return False
+
+    def get_all(self) -> Optional[list[Course]]:
+        list_course: Optional[list[Course]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = "SELECT * FROM course"
+            cursor.execute(sql)
+            record = cursor.fetchall()
+            if record is not None:
+                list_course = []
+                for course in record:
+                    course_object: Optional[Course] = self.parse(course)
+                    if(course_object is not None):
+                        list_course.append(course_object)
+
+        return list_course
+
+    def parse(self, record) -> Optional[Course]:
+        course: Optional[Course]
+        if record is not None:
+            course = Course(record['name'], record['start_date'], record['end_date'])
+            course.id = record['id_course']
+            if record['id_teacher'] is not None:
+                teacher_dao: TeacherDao = TeacherDao()
+                course.teacher = teacher_dao.read(record['id_teacher'])
+        else:
+            course = None
+        return course
 
     def get_students(self, id_course: int) -> Optional[list[Student]]:
         list_student: Optional[list[Student]]

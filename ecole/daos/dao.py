@@ -50,3 +50,10 @@ class Dao[T](ABC):
         :return: True si la suppression a pu être réalisée
         """
         ...
+
+    @abstractmethod
+    def get_all(self) -> list[T]:
+        """Récupère toutes les entités présentes en BD.
+
+        :return: liste contenant toutes les entités récupérées
+        """

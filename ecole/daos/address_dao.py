@@ -63,3 +63,6 @@ class AddressDao(Dao[Address]):
                 return True
             else:
                 return False
+
+    def get_all(self) -> Optional[list[Address]]:
+        return []

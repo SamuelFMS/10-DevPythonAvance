@@ -105,3 +105,6 @@ class TeacherDao(Dao[Teacher]):
                 return True
             else:
                 return False
+
+    def get_all(self) -> Optional[list[Teacher]]:
+        return []
