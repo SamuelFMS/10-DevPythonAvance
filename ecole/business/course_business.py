@@ -8,11 +8,6 @@ class CourseBusiness:
     course_dao: ClassVar[CourseDao] = CourseDao()
 
     @staticmethod
-    def get_all_courses(self) -> list:
-        courses: list = []
-        return courses
-
-    @staticmethod
     def add_courses(course: Course):
         return CourseBusiness.course_dao.create(course)
 

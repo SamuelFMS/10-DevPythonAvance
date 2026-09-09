@@ -1,9 +1,7 @@
 from datetime import date
-from typing import Optional
 
 from business.course_business import CourseBusiness
 from models.course import Course
-from models.teacher import Teacher
 
 
 def tests():
