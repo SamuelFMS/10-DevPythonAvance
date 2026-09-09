@@ -1,9 +1,10 @@
-from batteur_oeufs import BatteurOeufs
-from fondeur_chocolat import FondeurChocolat
+from patisserie.batteur_oeufs import BatteurOeufs
+from patisserie.chocolat import Chocolat
+from patisserie.fondeur_chocolat import FondeurChocolat
 
 if __name__ == "__main__":
     batteur = BatteurOeufs(6)
-    fondeur = FondeurChocolat(200)
+    fondeur = FondeurChocolat(Chocolat(200))
     batteur.start()
     fondeur.start()
     batteur.join()
