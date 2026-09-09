@@ -23,3 +23,7 @@ class StudentBusiness:
     @staticmethod
     def delete_student(student: Student):
         return StudentBusiness.student_dao.delete(student)
+
+    @staticmethod
+    def update_student(student: Student):
+        return StudentBusiness.student_dao.update(student)

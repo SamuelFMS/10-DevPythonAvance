@@ -19,6 +19,16 @@ def tests():
     assert read_student.last_name == 'LastNameTest'
     assert read_student.age == 20
 
+    #Edition du student
+    read_student.first_name = 'NewFirstName'
+    read_student.last_name = 'NewLastName'
+    read_student.age = 21
+    assert StudentBusiness.update_student(read_student)
+    edited_student = StudentBusiness.get_student_by_id(read_student.student_nbr)
+    assert edited_student.first_name == 'NewFirstName'
+    assert edited_student.last_name == 'NewLastName'
+    assert edited_student.age == 21
+
     #Suppression du cours que nous venons de créer
     assert StudentBusiness.delete_student(read_student)
 

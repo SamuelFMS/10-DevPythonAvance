@@ -63,13 +63,32 @@ class StudentDao(Dao[Student]):
 
 
     def update(self, student: Student) -> bool:
-        """Met à jour en BD l'entité Student correspondant à student, pour y correspondre
+        """Met à jour en BD l'entité Student correspondant à l'etudiant, pour y correspondre
 
-        :param student: Student déjà mis à jour en mémoire
+        :param student: student déjà mis à jour en mémoire
         :return: True si la mise à jour a pu être réalisée
         """
-        ...
-        return True
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "UPDATE person "
+                "JOIN student ON student.id_person = person.id_person "
+                "SET person.first_name = %(first_name)s, "
+                "person.last_name = %(last_name)s, "
+                "person.age = %(age)s, "
+                "person.id_address = %(id_address)s "
+                "WHERE student.student_nbr = %(student_nbr)s"
+            )
+
+            id_address = None
+            if student.address is not None:
+                id_address = student.address.id
+            cursor.execute(sql, {"first_name": student.first_name, "last_name": student.last_name, "age": student.age,
+                                 "id_address": id_address, "student_nbr": student.student_nbr})
+            if (cursor.rowcount == 1):
+                Dao.connection.commit()
+                return True
+            else:
+                return False
 
     def delete(self, student: Student) -> bool:
         """Supprime en BD l'entité Student correspondant à student
