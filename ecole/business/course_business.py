@@ -1,7 +1,9 @@
-from typing import ClassVar
+from typing import ClassVar, TYPE_CHECKING
 
 from daos.course_dao import CourseDao
 from models.course import Course
+if TYPE_CHECKING:
+    from models.student import Student
 
 
 class CourseBusiness:
@@ -24,8 +26,10 @@ class CourseBusiness:
         return CourseBusiness.course_dao.get_courses_by_student(id_student)
 
     @staticmethod
-    def assign_student_to_course(id_student: int, course: Course):
-        return CourseBusiness.course_dao.assign_student_to_course(id_student, course)
+    def assign_student_to_course(student: Student, course: Course):
+        if student.student_nbr is not None:
+            course.students_taking_it.append(student)
+            return CourseBusiness.course_dao.assign_student_to_course(student.student_nbr, course)
 
     @staticmethod
     def get_courses_from_teacher(id_teacher: int):

@@ -29,7 +29,7 @@ class Student(Person):
 
     def assign_course(self, course: Course):
         if self.student_nbr is not None:
-            return CourseBusiness.assign_student_to_course(self.student_nbr, course)
+            return CourseBusiness.assign_student_to_course(self, course)
         return None
 
     def __str__(self) -> str:
