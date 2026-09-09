@@ -97,7 +97,7 @@ class CourseDao(Dao[Course]):
         return list_course
 
     def parse(self, record) -> Optional[Course]:
-        #Import local pour eviter recursiviter
+        #Import local pour eviter circularité
         from daos.teacher_dao import TeacherDao
 
         course: Optional[Course]
