@@ -1,10 +1,12 @@
 import threading
 import time
 
+from Commis import Commis
 
-class BatteurOeufs(threading.Thread):
+
+class BatteurOeufs(Commis):
     def __init__(self, nb_oeufs):
-        threading.Thread.__init__(self)
+        super().__init__()
         self.nb_oeufs = nb_oeufs
 
     def run(self):

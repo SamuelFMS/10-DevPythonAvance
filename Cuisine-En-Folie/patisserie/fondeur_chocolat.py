@@ -2,10 +2,13 @@ import math
 import threading
 import time
 
+from Commis import Commis
 
-class FondeurChocolat(threading.Thread):
+
+class FondeurChocolat(Commis):
+
     def __init__(self, quantite):
-        threading.Thread.__init__(self)
+        super().__init__()
         self.quantite = quantite  # en grammes
 
     def run(self):
