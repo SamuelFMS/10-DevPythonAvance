@@ -30,13 +30,7 @@ class AddressDao(Dao[Address]):
                    "WHERE id_address = %s")
             cursor.execute(sql, (id_address))
             record = cursor.fetchone()
-        if record is not None:
-            address = Address(street=record['street'], city=record['city'], postal_code=record['postal_code'])
-            address.id = record['id_address']
-        else:
-            address = None
-
-        return address
+        return self.parse(record)
 
     def update(self, address: Address) -> bool:
         with Dao.connection.cursor() as cursor:
@@ -65,4 +59,24 @@ class AddressDao(Dao[Address]):
                 return False
 
     def get_all(self) -> Optional[list[Address]]:
-        return []
+        list_address: Optional[list[Address]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = "SELECT * FROM address"
+            cursor.execute(sql)
+            record = cursor.fetchall()
+            if record is not None:
+                list_address = []
+                for course in record:
+                    address_object: Optional[Address] = self.parse(course)
+                    if(address_object is not None):
+                        list_address.append(address_object)
+        return list_address
+
+    def parse(self, record) -> Optional[Address]:
+        address: Optional[Address]
+        if record is not None:
+            address = Address(street=record['street'], city=record['city'], postal_code=record['postal_code'])
+            address.id = record['id_address']
+        else:
+            address = None
+        return address

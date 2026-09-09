@@ -34,6 +34,10 @@ def tests():
     #Suppression du cours que nous venons de créer
     assert address_dao.delete(read_address)
 
+    #Verifie que get_all n'est pas vide
+    list_address:list|None = address_dao.get_all()
+    assert list_address is not None
+    assert len(list_address) > 0
 
 if __name__ == '__main__':
     # tests unitaires
