@@ -8,9 +8,8 @@ class StudentBusiness:
     student_dao: ClassVar[StudentDao] = StudentDao()
 
     @staticmethod
-    def get_all_students(self) -> list:
-        students: list = []
-        return students
+    def get_all_students():
+        return StudentBusiness.student_dao.get_all()
 
     @staticmethod
     def get_student_by_id(id_student: int):

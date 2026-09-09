@@ -32,7 +32,10 @@ def tests():
     #Suppression du cours que nous venons de créer
     assert StudentBusiness.delete_student(read_student)
 
-
+    #Verifie que get_all n'est pas vide
+    list_student:list|None = StudentBusiness.get_all_students()
+    assert list_student is not None
+    assert len(list_student) > 0
 
 
 if __name__ == '__main__':
