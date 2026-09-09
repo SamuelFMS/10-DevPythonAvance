@@ -41,20 +41,7 @@ class TeacherDao(Dao[Teacher]):
             )
             cursor.execute(sql, (id_teacher))
             record = cursor.fetchone()
-        if record is not None:
-            teacher = Teacher(
-                first_name=record['first_name'],
-                last_name=record['last_name'],
-                age=record['age'],
-                hiring_date=record['hiring_date']
-            )
-            teacher.id = id_teacher
-            if record['id_address']:
-                address_dao: AddressDao = AddressDao()
-                teacher.address = address_dao.read(record['id_address'])
-        else:
-            teacher = None
-
+        teacher = self.parse(record)
         return teacher
 
     def update(self, teacher: Teacher) -> bool:
@@ -107,4 +94,36 @@ class TeacherDao(Dao[Teacher]):
                 return False
 
     def get_all(self) -> Optional[list[Teacher]]:
-        return []
+        list_teacher: Optional[list[Teacher]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = (
+                "SELECT * "
+                "FROM teacher "
+                "JOIN person on person.id_person = teacher.id_person "
+            )
+            cursor.execute(sql)
+            record = cursor.fetchall()
+        if record is not None:
+            list_teacher = []
+            for teacher in record:
+                teacher_object: Optional[Teacher] = self.parse(teacher)
+                if (teacher_object is not None):
+                    list_teacher.append(teacher_object)
+        return list_teacher
+
+    def parse(self, record) -> Optional[Teacher]:
+        teacher: Optional[Teacher]
+        if record is not None:
+            teacher = Teacher(
+                first_name=record['first_name'],
+                last_name=record['last_name'],
+                age=record['age'],
+                hiring_date=record['hiring_date']
+            )
+            teacher.id = record['id_teacher']
+            if record['id_address']:
+                address_dao: AddressDao = AddressDao()
+                teacher.address = address_dao.read(record['id_address'])
+        else:
+            teacher = None
+        return teacher

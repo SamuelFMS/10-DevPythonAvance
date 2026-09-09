@@ -36,6 +36,10 @@ def tests():
     #Suppression du cours que nous venons de créer
     assert TeacherBusiness.delete_teacher(read_teacher)
 
+    #Verifie que get_all n'est pas vide
+    list_teacher:list|None = TeacherBusiness.get_all_teachers()
+    assert list_teacher is not None
+    assert len(list_teacher) > 0
 
 
 

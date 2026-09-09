@@ -8,10 +8,8 @@ class TeacherBusiness:
     teacher_dao: ClassVar[TeacherDao]  = TeacherDao()
 
     @staticmethod
-    def get_all_teachers(self) -> list:
-        teachers: list = []
-        return teachers
-
+    def get_all_teachers():
+        return TeacherBusiness.teacher_dao.get_all()
 
     @staticmethod
     def get_teacher_by_id(id_teacher: int):
