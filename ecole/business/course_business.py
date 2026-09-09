@@ -31,3 +31,7 @@ class CourseBusiness:
     @staticmethod
     def delete_course(course: Course):
         return CourseBusiness.course_dao.delete(course)
+
+    @staticmethod
+    def get_all_course():
+        return CourseBusiness.course_dao.get_all()

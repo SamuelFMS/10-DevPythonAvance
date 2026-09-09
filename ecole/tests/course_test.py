@@ -1,4 +1,6 @@
 from datetime import date
+from typing import Optional
+
 from business.course_business import CourseBusiness
 from models.course import Course
 from models.teacher import Teacher
@@ -40,7 +42,10 @@ def tests():
     #Suppression du cours que nous venons de créer
     assert CourseBusiness.delete_course(read_course)
 
-
+    #Verifie que get_all n'est pas vide
+    list_course:list|None = CourseBusiness.get_all_course()
+    assert list_course is not None
+    assert len(list_course) > 0
 
 
 if __name__ == '__main__':
