@@ -150,3 +150,19 @@ class CourseDao(Dao[Course]):
                     if course_object is not None:
                         list_course.append(course_object)
         return list_course
+
+    def get_courses_by_teacher(self, id_teacher) -> Optional[list[Course]]:
+        list_course: Optional[list[Course]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = """SELECT *
+            FROM course
+            WHERE course.id_teacher=%s"""
+            cursor.execute(sql, (id_teacher,))
+            record = cursor.fetchall()
+            if record is not None:
+                list_course = []
+                for course in record:
+                    course_object: Optional[Course] = self.parse(course)
+                    if course_object is not None:
+                        list_course.append(course_object)
+        return list_course

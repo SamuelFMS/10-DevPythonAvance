@@ -25,7 +25,7 @@ class Student(Person):
 
     def courses_taken(self):
         if self.student_nbr is not None:
-            return CourseBusiness.get_course_from_student(self.student_nbr)
+            return CourseBusiness.get_courses_from_student(self.student_nbr)
         return None
 
     def assign_course(self, course: Course):

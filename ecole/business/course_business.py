@@ -20,12 +20,16 @@ class CourseBusiness:
         return CourseBusiness.course_dao.get_students(id_course)
 
     @staticmethod
-    def get_course_from_student(id_student: int):
+    def get_courses_from_student(id_student: int):
         return CourseBusiness.course_dao.get_courses_by_student(id_student)
 
     @staticmethod
     def assign_student_to_course(id_student: int, course: Course):
         return CourseBusiness.course_dao.assign_student_to_course(id_student, course)
+
+    @staticmethod
+    def get_courses_from_teacher(id_teacher: int):
+        return CourseBusiness.course_dao.get_courses_by_teacher(id_teacher)
 
     @staticmethod
     def update_course(course: Course):
