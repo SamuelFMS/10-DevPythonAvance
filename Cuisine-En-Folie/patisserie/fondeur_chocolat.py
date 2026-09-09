@@ -2,7 +2,7 @@ import math
 import threading
 import time
 
-from Commis import Commis
+from commis import Commis
 
 
 class FondeurChocolat(Commis):

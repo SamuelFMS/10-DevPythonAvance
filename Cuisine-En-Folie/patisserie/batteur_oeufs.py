@@ -1,7 +1,7 @@
 import threading
 import time
 
-from Commis import Commis
+from commis import Commis
 
 
 class BatteurOeufs(Commis):
