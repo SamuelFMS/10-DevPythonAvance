@@ -5,7 +5,6 @@ Classe Dao[Course]
 """
 from dataclasses import dataclass
 from typing import Optional
-
 from daos.dao import Dao
 from models.course import Course
 
@@ -99,6 +98,7 @@ class CourseDao(Dao[Course]):
     def parse(self, record) -> Optional[Course]:
         #Import local pour eviter circularité
         from daos.teacher_dao import TeacherDao
+        from business.student_business import StudentBusiness
 
         course: Optional[Course]
         if record is not None:
@@ -107,24 +107,10 @@ class CourseDao(Dao[Course]):
             if record['id_teacher'] is not None:
                 teacher_dao: TeacherDao = TeacherDao()
                 course.teacher = teacher_dao.read(record['id_teacher'])
+            course.students_taking_it = StudentBusiness.get_students_from_courses(record['id_course'])
         else:
             course = None
         return course
-
-    """def get_students(self, id_course: int) -> Optional[list[Student]]:
-        list_student: Optional[list[Student]]
-        with Dao.connection.cursor() as cursor:
-            sql = ("SELECT * FROM takes "
-                   "WHERE id_course=%s")
-            cursor.execute(sql, (id_course,))
-            record = cursor.fetchall()
-        if record is not None:
-            student_dao = StudentDao()
-            list_student = []
-            for student in record:
-                list_student.append(student_dao.read(student["student_nbr"]));
-
-        return list_student"""
 
     def assign_student_to_course(self, id_student: int, course: Course) -> bool:
         with Dao.connection.cursor() as cursor:

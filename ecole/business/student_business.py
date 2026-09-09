@@ -26,3 +26,7 @@ class StudentBusiness:
     @staticmethod
     def update_student(student: Student):
         return StudentBusiness.student_dao.update(student)
+
+    @staticmethod
+    def get_students_from_courses(id_course: int):
+        return StudentBusiness.student_dao.get_students_from_course(id_course)

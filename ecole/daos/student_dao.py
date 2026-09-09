@@ -119,6 +119,24 @@ class StudentDao(Dao[Student]):
                         list_student.append(student_object)
         return list_student
 
+    def get_students_from_course(self, id_course: int) -> Optional[list[Student]]:
+        list_student: Optional[list[Student]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = """SELECT * 
+                    FROM student
+                    JOIN takes ON takes.student_nbr = student.student_nbr
+                    JOIN person on person.id_person = student.id_person 
+                    WHERE takes.id_course=%s """
+            cursor.execute(sql, (id_course))
+            record = cursor.fetchall()
+        if record is not None:
+            list_student = []
+            for(student) in record:
+                student_object: Optional[Student] = self.parse(student)
+                if (student_object is not None):
+                    list_student.append(student_object)
+        return list_student
+
     def parse(self, record) -> Optional[Student]:
         student: Optional[Student]
         if record is not None:

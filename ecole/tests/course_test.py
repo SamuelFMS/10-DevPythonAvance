@@ -41,9 +41,10 @@ def tests():
     assert CourseBusiness.delete_course(read_course)
 
     #Verifie que get_all n'est pas vide
-    list_course:list|None = CourseBusiness.get_all_course()
+    list_course:list[Course]|None = CourseBusiness.get_all_course()
     assert list_course is not None
     assert len(list_course) > 0
+    assert len(list_course[0].students_taking_it) > 0
 
 
 if __name__ == '__main__':
