@@ -1,5 +1,7 @@
+from patisserie import unite
 from patisserie.ingredient import Ingredient
 
 
 class Oeuf(Ingredient):
-    pass
+    def get_unite(self) -> unite.Unite:
+        return unite.Unite.PIECE

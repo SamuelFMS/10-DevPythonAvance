@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from patisserie import unite
 
@@ -6,4 +6,7 @@ from patisserie import unite
 class Ingredient(ABC):
     nom: str
     quantite: int
-    unite: unite
+
+    @abstractmethod
+    def get_unite(self) -> unite.Unite:
+        pass
