@@ -1,7 +1,9 @@
 from datetime import date
 
 from business.course_business import CourseBusiness
+from business.student_business import StudentBusiness
 from models.course import Course
+from models.student import Student
 
 
 def tests():
@@ -14,6 +16,16 @@ def tests():
     new_course_id = CourseBusiness.add_courses(course)
     assert new_course_id != 0
     assert course.id == new_course_id
+
+    # Attribution de 3 èleves au cours
+    list_students: list[Student] = StudentBusiness.get_all_students()
+    assert list_students[0].student_nbr is not None
+    CourseBusiness.assign_student_to_course(list_students[0].student_nbr, course)
+    assert list_students[1].student_nbr is not None
+    CourseBusiness.assign_student_to_course(list_students[1].student_nbr, course)
+    assert list_students[2].student_nbr is not None
+    CourseBusiness.assign_student_to_course(list_students[2].student_nbr, course)
+    assert len(course.students_taking_it) == 3
 
     #Recuperation du cours dans la base de donnée
     read_course:Course|None = CourseBusiness.get_course_by_id(new_course_id)
