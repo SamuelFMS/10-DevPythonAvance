@@ -1,18 +1,26 @@
 from datetime import date
+
+from business.course_business import CourseBusiness
 from business.teacher_business import TeacherBusiness
+from models.course import Course
 from models.teacher import Teacher
 
 
 def tests():
     print("Executing tests for Teacher")
 
-    # Creation d'un cours
+    # Creation d'un teacher
     teacher = Teacher("FirstNameTest", "LastNameTest", 20, date(2021,5,1))
     new_teacher_id = TeacherBusiness.add_teacher(teacher)
     assert new_teacher_id != 0
     assert teacher.id == new_teacher_id
 
-    #Recuperation du cours dans la base de donnée
+    #Creation d'un cours avec le nouveau teacher
+    course = Course("FirstNameTest", date(2021,2,2), date(2026,5,1))
+    course.teacher = teacher
+    CourseBusiness.add_courses(course)
+
+    #Recuperation du teacher dans la base de donnée
     read_teacher = TeacherBusiness.get_teacher_by_id(new_teacher_id)
     assert read_teacher is not None
     assert read_teacher.id == new_teacher_id
@@ -33,7 +41,8 @@ def tests():
     assert edited_student.age == 21
     assert edited_student.hiring_date == date(2024,6,7)
 
-    #Suppression du cours que nous venons de créer
+    #Suppression du teacher que nous venons de créer
+    assert CourseBusiness.delete_course(course)
     assert TeacherBusiness.delete_teacher(read_teacher)
 
     #Verifie que get_all n'est pas vide
