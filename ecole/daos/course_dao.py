@@ -7,10 +7,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from daos.dao import Dao
-from daos.student_dao import StudentDao
 from daos.teacher_dao import TeacherDao
 from models.course import Course
-from models.student import Student
 
 
 @dataclass
@@ -111,7 +109,7 @@ class CourseDao(Dao[Course]):
             course = None
         return course
 
-    def get_students(self, id_course: int) -> Optional[list[Student]]:
+    """def get_students(self, id_course: int) -> Optional[list[Student]]:
         list_student: Optional[list[Student]]
         with Dao.connection.cursor() as cursor:
             sql = ("SELECT * FROM takes "
@@ -124,4 +122,21 @@ class CourseDao(Dao[Course]):
             for student in record:
                 list_student.append(student_dao.read(student["student_nbr"]));
 
-        return list_student
+        return list_student"""
+
+    def get_courses_by_student(self, id_student) -> Optional[list[Course]]:
+        list_course: Optional[list[Course]] = None
+        with Dao.connection.cursor() as cursor:
+            sql = """SELECT course.*
+                    FROM course
+                    JOIN takes on takes.id_course = course.id_course
+                    WHERE takes.student_nbr=%s"""
+            cursor.execute(sql, (id_student,))
+            record = cursor.fetchall()
+            if record is not None:
+                list_course = []
+                for course in record:
+                    course_object: Optional[Course] = self.parse(course)
+                    if course_object is not None:
+                        list_course.append(course_object)
+        return list_course

@@ -6,6 +6,9 @@ Classe Student, fille de la classe Person
 
 from dataclasses import dataclass, field
 from typing import ClassVar
+
+from business import course_business
+from business.course_business import CourseBusiness
 from .person import Person
 from .course import Course
 
@@ -19,12 +22,10 @@ class Student(Person):
     """
     students_nb: ClassVar[int] = 0  # nb d'étudiants créés
     student_nbr: int|None = field(init=False)
-    courses_taken: list[Course] = field(default_factory=list, init=False)
 
-    def add_course(self, course: Course) -> None:
-        """Ajout du cours course à la liste des cours suivis par l'élève."""
-        self.courses_taken.append(course)
-        course.students_taking_it.append(self)
+    def courses_taken(self):
+        if(self.student_nbr != None):
+            return CourseBusiness.get_course_from_student(self.student_nbr)
 
     def __str__(self) -> str:
         person_str = super().__str__()

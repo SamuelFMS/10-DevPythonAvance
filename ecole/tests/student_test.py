@@ -42,6 +42,8 @@ def tests():
     list_student:list|None = StudentBusiness.get_all_students()
     assert list_student is not None
     assert len(list_student) > 0
+    student = list_student[0]
+    assert len(student.courses_taken()) != 0
 
 
 if __name__ == '__main__':

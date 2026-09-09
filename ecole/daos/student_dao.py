@@ -38,10 +38,10 @@ class StudentDao(Dao[Student]):
         student: Optional[Student]
 
         with Dao.connection.cursor() as cursor:
-            sql = ("SELECT * "
-                   "FROM student "
-                   "JOIN person on person.id_person = student.id_person "
-                   "WHERE student_nbr = %s")
+            sql = """SELECT * 
+                   FROM student 
+                   JOIN person on person.id_person = student.id_person 
+                   WHERE student_nbr = %s"""
             cursor.execute(sql, (id_student))
             record = cursor.fetchone()
         student = self.parse(record)
