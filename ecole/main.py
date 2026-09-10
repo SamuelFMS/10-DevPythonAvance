@@ -76,6 +76,41 @@ def manage_student():
     elif choice == 4:
         display_all_students()
 
+def create_teacher():
+    first_name = input_str("Prenom de l'enseignant: ", False)
+    last_name = input_str("Nom de l'enseignant: ", False)
+    age = input_number("Age de l'enseignant: ", 0,120)
+    date = input_date("Date d'arrivé: ")
+    teacher: Teacher = Teacher(first_name, last_name, age, date)
+    TeacherBusiness.add_teacher(teacher)
+
+def delete_teacher():
+    display_all_teacher()
+    choice_teacher = input_number("Entrez l'id enseignant a supprimer: ", 1, MAXINT)
+    teacher = TeacherBusiness.get_teacher_by_id(choice_teacher)
+    if teacher is not None:
+        if TeacherBusiness.delete_teacher(teacher):
+            print("Suppression avec success")
+
+def display_all_teacher():
+    list_teacher = TeacherBusiness.get_all_teachers()
+    for teacher in list_teacher:
+        print(teacher)
+
+def manage_teacher():
+    print("1 - Creer un enseignant")
+    print("2 - Modifier un enseignant")
+    print("3 - Supprimer un enseignant")
+    print("4 - Affiche la liste d'enseignants")
+    print("5 - Ne rien faire")
+    choice = input_number("Que souhaitez vous faire ? ", 1, 5)
+    if choice == 1:
+        create_teacher()
+    elif choice == 3:
+        delete_teacher()
+    elif choice == 4:
+        display_all_teacher()
+
 def display_course_with_students(course):
     print(course)
     for student in course.students_taking_it:
