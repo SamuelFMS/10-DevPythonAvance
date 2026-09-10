@@ -111,6 +111,45 @@ def manage_teacher():
     elif choice == 4:
         display_all_teacher()
 
+def create_course():
+    course_name = input_str("Nom du cours: ", False)
+    debut_date = input_date("Entrez la date de début: ")
+    end_date = input_date("Entrez la date de fin: ")
+    course = Course(course_name, debut_date, end_date)
+    display_all_teacher()
+    teacher_id = input_number("Entrez l'id du teacher: ", 1, MAXINT)
+    teacher = TeacherBusiness.get_teacher_by_id(teacher_id)
+    course.teacher = teacher
+    if teacher is not None:
+        if CourseBusiness.add_courses(course):
+            print("Creation success")
+
+def manage_course():
+    print("1- Creer un nouveau cours")
+    print("2- Modiifer un cours")
+    print("3- Supprimer un cours")
+    print("4- Affiche la liste des cours")
+    print("5- Ne rien faire")
+    choice = input_number("Que souhaitez vous faire ? ", 1, 5)
+    if choice == 1:
+        create_course()
+
+
+
+def director_interface():
+    print("1- Gérer les élèves")
+    print("2- Gérer les enseignants")
+    print("3- Gérer les cours")
+    print("4- Ne rien faire")
+    choice = input_number("Que souhaitez vous faire ? ", 1, 4)
+    if choice == 1:
+        manage_student()
+    elif choice == 2:
+        manage_teacher()
+    elif choice == 3:
+        manage_course()
+
+
 def display_course_with_students(course):
     print(course)
     for student in course.students_taking_it:
