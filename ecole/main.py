@@ -9,6 +9,10 @@ from xmlrpc.client import MAXINT
 from business.course_business import CourseBusiness
 from business.student_business import StudentBusiness
 from business.teacher_business import TeacherBusiness
+from models.course import Course
+from models.student import Student
+from models.teacher import Teacher
+from utils import input_number, input_str, input_date
 
 
 def student_interface():
@@ -34,6 +38,43 @@ def teacher_interface():
         list_course = teacher.courses_teached()
         for course in list_course:
             display_course_with_students(course)
+
+def create_student():
+    first_name = input_str("Prenom de l'eleve: ", False)
+    last_name = input_str("Nom de l'eleve: ", False)
+    age = input_number("Age de l'eleve: ", 0,120)
+    student: Student = Student(first_name, last_name, age)
+    StudentBusiness.add_student(student)
+    print(student)
+
+def delete_student():
+    print("Selectionner le compte d'un éleve a supprimer")
+    list_students = StudentBusiness.get_all_students()
+    for student in list_students:
+        print(student)
+    account_choice = input_number("Entrez le numéro de étudiant: ", 1, MAXINT)
+    student = StudentBusiness.get_student_by_id(account_choice)
+    if (student is not None):
+        StudentBusiness.delete_student(student)
+
+def display_all_students():
+    list_students = StudentBusiness.get_all_students()
+    for student in list_students:
+        print(student)
+
+def manage_student():
+    print("1- Creer un eleve")
+    print("2- Modifier un eleve")
+    print("3- Supprimer un eleve")
+    print("4- Afficher la liste d'eleves")
+    print("5- Ne rien faire")
+    choice = input_number("Que souhaitez vous faire ? ", 1, 5)
+    if choice == 1:
+        create_student()
+    elif choice == 3:
+        delete_student()
+    elif choice == 4:
+        display_all_students()
 
 def display_course_with_students(course):
     print(course)
