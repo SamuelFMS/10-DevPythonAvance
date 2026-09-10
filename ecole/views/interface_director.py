@@ -3,11 +3,11 @@ from xmlrpc.client import MAXINT
 from business.course_business import CourseBusiness
 from business.student_business import StudentBusiness
 from business.teacher_business import TeacherBusiness
-from interface_student import display_all_students
 from models.course import Course
 from models.student import Student
 from models.teacher import Teacher
 from utils.input_utils import input_number, input_date, input_str
+from views.interface_student import display_all_students
 
 
 def create_student():
