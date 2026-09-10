@@ -29,7 +29,7 @@ class Teacher(Person):
 
     def __str__(self) -> str:
         person_str = super().__str__()
-        return f"{person_str}, arrivé(e) le {self.hiring_date}"
+        return f"{person_str}, arrivé(e) le {self.hiring_date} (id: {self.id})"
 
     def courses_teached(self):
         if self.id is not None:
