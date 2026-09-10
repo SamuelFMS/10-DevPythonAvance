@@ -11,6 +11,7 @@ from views.interface_teacher import display_all_teacher
 class ManageCourse(Manage):
     def get_name(self):
         return "cours"
+
     def get_name_pluriels(self):
         return "cours"
 
@@ -49,7 +50,3 @@ class ManageCourse(Manage):
 
     def update(self):
         pass
-
-
-
-

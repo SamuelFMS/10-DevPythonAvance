@@ -10,8 +10,6 @@ from views.interface_student import student_interface
 from views.interface_teacher import teacher_interface
 
 
-
-
 def main() -> None:
     """Programme principal."""
     print("""\
