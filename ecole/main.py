@@ -156,18 +156,6 @@ def display_course_with_students(course):
         print("- ", student)
     print("")
 
-def input_number(message: str, min: int, max: int) -> int:
-    try:
-        saisie = int(input(message))
-        if saisie >= min and saisie <= max:
-            return saisie
-        else:
-            print(message)
-            return input_number(message, min, max)
-    except ValueError:
-        print("Incorrect input. Please enter a number")
-        return input_number(message, min, max)
-
 def print_all_courses():
     list_courses = CourseBusiness.get_all_course()
     for course in list_courses:
@@ -199,6 +187,6 @@ Bienvenue dans notre école
     elif choice == 2:
         teacher_interface()
     elif choice == 3:
-        print_all_courses()
+        director_interface()
 if __name__ == '__main__':
     main()
