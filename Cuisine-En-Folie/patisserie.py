@@ -9,6 +9,7 @@ if __name__ == "__main__":
     batteur = BatteurOeufs(recipientOeuf)
     recipientChocolat = Recipient("Recipient a chocolat", Chocolat(200))
     fondeur = FondeurChocolat(recipientChocolat)
+    secondfondeur = FondeurChocolat()
     batteur.start()
     fondeur.start()
     batteur.join()
