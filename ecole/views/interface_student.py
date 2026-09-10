@@ -1,7 +1,7 @@
 from xmlrpc.client import MAXINT
 
 from business.student_business import StudentBusiness
-from utils import input_number
+from utils.InputUtils import input_number
 
 
 def display_all_students():

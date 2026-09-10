@@ -4,11 +4,10 @@
 """
 Application de gestion d'une école
 """
-
+from utils.InputUtils import input_number
 from views.interface_director import director_interface
 from views.interface_student import student_interface
 from views.interface_teacher import teacher_interface
-from utils import input_number
 
 
 def main() -> None:

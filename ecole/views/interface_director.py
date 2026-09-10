@@ -7,7 +7,7 @@ from interface_student import display_all_students
 from models.course import Course
 from models.student import Student
 from models.teacher import Teacher
-from utils import input_number, input_date, input_str
+from utils.InputUtils import input_number, input_date, input_str
 
 
 def create_student():

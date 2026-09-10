@@ -2,7 +2,7 @@ from xmlrpc.client import MAXINT
 
 from business.teacher_business import TeacherBusiness
 from interface_student import display_course_with_students
-from utils import input_number
+from utils.InputUtils import input_number
 
 
 def teacher_interface():
