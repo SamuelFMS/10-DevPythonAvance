@@ -4,8 +4,6 @@
 """
 Application de gestion d'une école
 """
-import this
-
 from utils.menu import Menu
 from views.interface_director import director_interface
 from views.interface_student import student_interface

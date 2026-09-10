@@ -37,7 +37,7 @@ class Course:
     students_taking_it: list[Student] = field(default_factory=list, init=False)
 
     def __str__(self) -> str:
-        course_str = f"{self.name} ({self.start_date} – {self.end_date}),\n"
+        course_str = f"Cours n°{self.id} - {self.name} ({self.start_date} – {self.end_date}),\n"
         course_str += f"enseigné par {self.teacher}" \
             if self.teacher is not None else "pas d'enseignant affecté"
         return course_str

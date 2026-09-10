@@ -16,3 +16,8 @@ def teacher_interface():
         list_course = teacher.courses_teached()
         for course in list_course:
             display_course_with_students(course)
+
+def display_all_teacher():
+    list_teacher = TeacherBusiness.get_all_teachers()
+    for teacher in list_teacher:
+        print(teacher)

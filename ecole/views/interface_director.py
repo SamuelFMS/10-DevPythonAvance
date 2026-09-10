@@ -1,13 +1,13 @@
 from xmlrpc.client import MAXINT
 
-from business.course_business import CourseBusiness
 from business.student_business import StudentBusiness
 from business.teacher_business import TeacherBusiness
-from models.course import Course
 from models.student import Student
 from models.teacher import Teacher
 from utils.input_utils import input_number, input_date, input_str
+from views.director_manage.manage_course import ManageCourse
 from views.interface_student import display_all_students
+from views.interface_teacher import display_all_teacher
 
 
 def create_student():
@@ -58,11 +58,6 @@ def delete_teacher():
         if TeacherBusiness.delete_teacher(teacher):
             print("Suppression avec success")
 
-def display_all_teacher():
-    list_teacher = TeacherBusiness.get_all_teachers()
-    for teacher in list_teacher:
-        print(teacher)
-
 def manage_teacher():
     print("1 - Creer un enseignant")
     print("2 - Modifier un enseignant")
@@ -77,53 +72,10 @@ def manage_teacher():
     elif choice == 4:
         display_all_teacher()
 
-def create_course():
-    course_name = input_str("Nom du cours: ", False)
-    debut_date = input_date("Entrez la date de début: ")
-    end_date = input_date("Entrez la date de fin: ")
-    course = Course(course_name, debut_date, end_date)
-    display_all_teacher()
-    teacher_id = input_number("Entrez l'id du teacher: ", 1, MAXINT)
-    teacher = TeacherBusiness.get_teacher_by_id(teacher_id)
-    course.teacher = teacher
-    if teacher is not None:
-        new_id_course = CourseBusiness.add_courses(course)
-        if new_id_course:
-            print("Creation success")
-
-def delete_course():
-    display_all_courses()
-    print("Entrez l'id du cours a supprimer")
-    course_id = input_number("Entrez l'id du cours a supprimer: ", 0, MAXINT)
-    course = CourseBusiness.get_course_by_id(course_id)
-    if course is not None:
-        result = CourseBusiness.delete_course(course)
-        if result:
-            print("Suppression success")
-        else:
-            print("Deletion failure")
-
-def display_all_courses():
-    list_courses = CourseBusiness.get_all_course()
-    for course in list_courses:
-        print(course)
-        for student in course.students_taking_it:
-            print("- ", student)
-        print("")
 
 def manage_course():
-    print("1- Creer un nouveau cours")
-    print("2- Modiifer un cours")
-    print("3- Supprimer un cours")
-    print("4- Affiche la liste des cours")
-    print("5- Ne rien faire")
-    choice = input_number("Que souhaitez vous faire ? ", 1, 5)
-    if choice == 1:
-        create_course()
-    elif choice == 3:
-        delete_course()
-    elif choice == 4:
-        display_all_courses()
+    manage = ManageCourse()
+    manage.manage()
 
 def director_interface():
     print("1- Gérer les élèves")
