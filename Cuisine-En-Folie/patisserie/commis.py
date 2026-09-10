@@ -1,10 +1,15 @@
+
 import threading
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from threading import Thread
+from patisserie.recipient import Recipient
 
 
-class Commis(ABC, threading.Thread):
-
-    def __init__(self):
+@dataclass(eq=False)
+class Commis(ABC, Thread):
+    recipient: Recipient
+    def __post_init__(self):
         threading.Thread.__init__(self)
 
     @abstractmethod
