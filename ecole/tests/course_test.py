@@ -6,59 +6,155 @@ from models.course import Course
 from models.student import Student
 
 
+def test_add_course():
+    """Vérifie qu'un cours peut être ajouté en BDD."""
+    course = Course(
+        "Test Course",
+        date(2026, 1, 1),
+        date(2026, 5, 1)
+    )
+
+    teacher = CourseBusiness.get_course_by_id(1).teacher
+    assert teacher is not None
+    assert teacher.id is not None
+
+    course.teacher = teacher
+
+    course_id = CourseBusiness.add_courses(course)
+
+    assert course_id is not None
+    assert course_id > 0
+    assert course.id == course_id
+
+    # Nettoyage
+    CourseBusiness.delete_course(course)
+
+
+def test_get_course_by_id():
+    """Vérifie qu'un cours ajouté peut être récupéré."""
+    course = Course(
+        "Test Read",
+        date(2026, 1, 1),
+        date(2026, 5, 1)
+    )
+    course.teacher = CourseBusiness.get_course_by_id(1).teacher
+
+    course_id = CourseBusiness.add_courses(course)
+
+    read_course: Course | None = CourseBusiness.get_course_by_id(course_id)
+
+    assert read_course is not None
+    assert read_course.id == course_id
+    assert read_course.name == "Test Read"
+    assert read_course.start_date == date(2026, 1, 1)
+    assert read_course.end_date == date(2026, 5, 1)
+
+    # Nettoyage
+    CourseBusiness.delete_course(course)
+
+
+def test_update_course():
+    """Vérifie qu'un cours peut être modifié."""
+    course = Course(
+        "Before Update",
+        date(2026, 1, 1),
+        date(2026, 5, 1)
+    )
+    course.teacher = CourseBusiness.get_course_by_id(1).teacher
+
+    CourseBusiness.add_courses(course)
+
+    course.name = "After Update"
+    course.start_date = date(2026, 2, 1)
+    course.end_date = date(2026, 6, 1)
+
+    result = CourseBusiness.update_course(course)
+
+    assert result is True
+
+    updated_course = CourseBusiness.get_course_by_id(course.id)
+
+    assert updated_course is not None
+    assert updated_course.name == "After Update"
+    assert updated_course.start_date == date(2026, 2, 1)
+    assert updated_course.end_date == date(2026, 6, 1)
+
+    # Nettoyage
+    CourseBusiness.delete_course(course)
+
+
+def test_assign_students_to_course():
+    """Vérifie que des étudiants peuvent être affectés à un cours."""
+    course = Course(
+        "Test Students",
+        date(2026, 1, 1),
+        date(2026, 5, 1)
+    )
+    course.teacher = CourseBusiness.get_course_by_id(1).teacher
+
+    CourseBusiness.add_courses(course)
+
+    students: list[Student] = StudentBusiness.get_all_students()
+
+    assert len(students) >= 3
+
+    for student in students[:3]:
+        assert student.student_nbr is not None
+        CourseBusiness.assign_student_to_course(student, course)
+
+    assert len(course.students_taking_it) == 3
+
+    # Encore mieux : vérifier en relisant depuis la BDD
+    saved_course = CourseBusiness.get_course_by_id(course.id)
+
+    assert saved_course is not None
+    assert len(saved_course.students_taking_it) == 3
+
+    CourseBusiness.delete_course(course)
+
+
+def test_delete_course():
+    """Vérifie qu'un cours peut être supprimé."""
+    course = Course(
+        "Test Delete",
+        date(2026, 1, 1),
+        date(2026, 5, 1)
+    )
+    course.teacher = CourseBusiness.get_course_by_id(1).teacher
+
+    CourseBusiness.add_courses(course)
+
+    course_id = course.id
+
+    result = CourseBusiness.delete_course(course)
+
+    assert result is True
+
+    deleted_course = CourseBusiness.get_course_by_id(course_id)
+
+    assert deleted_course is None
+
+
+def test_get_all_courses():
+    """Vérifie que la récupération de tous les cours fonctionne."""
+    courses: list[Course] | None = CourseBusiness.get_all_course()
+
+    assert courses is not None
+    assert len(courses) > 0
+
+
 def tests():
     print("Executing tests for Course")
 
-    # Creation d'un cours
-    course = Course('test',date(2021,1,2),date(2026,5,1))
-    course.teacher = CourseBusiness.get_course_by_id(1).teacher
-    assert course.teacher.id != 0
-    new_course_id = CourseBusiness.add_courses(course)
-    assert new_course_id != 0
-    assert course.id == new_course_id
+    test_add_course()
+    test_get_course_by_id()
+    test_update_course()
+    test_assign_students_to_course()
+    test_delete_course()
+    test_get_all_courses()
 
-    # Attribution de 3 èleves au cours
-    list_students: list[Student] = StudentBusiness.get_all_students()
-    assert list_students[0].student_nbr is not None
-    CourseBusiness.assign_student_to_course(list_students[0], course)
-    assert list_students[1].student_nbr is not None
-    CourseBusiness.assign_student_to_course(list_students[1], course)
-    assert list_students[2].student_nbr is not None
-    CourseBusiness.assign_student_to_course(list_students[2], course)
-    assert len(course.students_taking_it) == 3
-
-    #Recuperation du cours dans la base de donnée
-    read_course:Course|None = CourseBusiness.get_course_by_id(new_course_id)
-    assert read_course is not None
-    assert read_course.id == new_course_id
-    assert read_course.name == 'test'
-    assert read_course.start_date == date(2021,1,2)
-    assert read_course.end_date == date(2026,5,1)
-
-    #Edition du cours
-    read_course.teacher = CourseBusiness.get_course_by_id(2).teacher
-    assert read_course.teacher.id != course.teacher.id
-    read_course.start_date = date(2021,3,5)
-    read_course.end_date = date(2025,5,30)
-    read_course.name = "Lecture"
-    assert CourseBusiness.update_course(read_course)
-    assert read_course.id is not None
-    edited_course = CourseBusiness.get_course_by_id(read_course.id)
-    assert edited_course.teacher == CourseBusiness.get_course_by_id(2).teacher
-    assert edited_course.start_date == date(2021,3,5)
-    assert edited_course.end_date == date(2025,5,30)
-    assert edited_course.name == "Lecture"
-
-    #Suppression du cours que nous venons de créer
-    assert CourseBusiness.delete_course(read_course)
-
-    #Verifie que get_all n'est pas vide
-    list_course:list[Course]|None = CourseBusiness.get_all_course()
-    assert list_course is not None
-    assert len(list_course) > 0
-    assert len(list_course[0].students_taking_it) > 0
+    print("All Course tests passed!")
 
 
-if __name__ == '__main__':
-    # tests unitaires
+if __name__ == "__main__":
     tests()

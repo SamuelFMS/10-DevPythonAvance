@@ -18,6 +18,12 @@ class Dao[T](ABC):
                         database='ecole',
                         cursorclass=pymysql.cursors.DictCursor)
 
+    connectiontest: ClassVar[pymysql.Connection] = \
+        pymysql.connect(host='localhost',
+                        user='root',
+                        database='test-ecole',
+                        cursorclass=pymysql.cursors.DictCursor)
+
     @abstractmethod
     def create(self, obj: T) -> int:
         """Crée l'entité en BD correspondant à l'objet obj
